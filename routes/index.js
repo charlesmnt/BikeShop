@@ -1,3 +1,4 @@
+const stripe = require('stripe')('sk_test_51KHoLVI6WE1jVFtGcIQY8nu4pbXYBsqieCX55FJbpZjiJ5twCu3Loc1c5gq4jrkdCHLtDNBTQwgecZ2EflfxhI0a00Sxv9Z0xh');
 var express = require('express');
 var router = express.Router();
 
@@ -12,6 +13,7 @@ var dataBike = [
 
 
 /* GET home page. */
+
 router.get('/', function(req, res, next) {
 
   if(req.session.dataCardBike == undefined){
@@ -61,5 +63,25 @@ router.post('/update-shop', function(req, res, next){
 
   res.render('shop',{dataCardBike:req.session.dataCardBike})
 })
+
+router.post('/paiement', async (req, res) =>{
+
+  const session = await stripe.checkout.sessions.create({
+    
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: 2000,
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: "https://vast-citadel-14122.herokuapp.com/success",
+    cancel_url: "https://vast-citadel-14122.herokuapp.com/cancel",
+  });
+
+  res.redirect(303, session.url);
+});
+
 
 module.exports = router;
