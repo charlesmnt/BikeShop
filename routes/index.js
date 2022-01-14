@@ -97,8 +97,8 @@ router.post('/create-checkout-session', async (req, res) => {
     payment_method_types: ['card'],
     line_items: line_items,
     mode: 'payment',
-    success_url: 'http://https://vast-citadel-14122.herokuapp.com/success',
-    cancel_url: 'http://https://vast-citadel-14122.herokuapp.com/cancel',
+    success_url: 'https://vast-citadel-14122.herokuapp.com/success',
+    cancel_url: 'https://vast-citadel-14122.herokuapp.com/cancel',
   });
  
   res.redirect(303, session.url);
