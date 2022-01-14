@@ -54,6 +54,19 @@ router.get('/delete-shop', function(req, res, next){
   res.render('shop',{dataCardBike:req.session.dataCardBike})
 })
 
+router.get('/success', function(req, res, next){
+  
+
+  res.render('success');
+})
+
+router.get('/cancel', function(req, res, next){
+  
+  req.session.dataCardBike.splice(req.query.position,1)
+
+  res.render('cancel');
+})
+
 router.post('/update-shop', function(req, res, next){
   
   var position = req.body.position;
@@ -64,24 +77,32 @@ router.post('/update-shop', function(req, res, next){
   res.render('shop',{dataCardBike:req.session.dataCardBike})
 })
 
-router.post('/paiement', async (req, res) =>{
+router.post('/create-checkout-session', async (req, res) => {
+  var line_items = []
+  for (var i=0; i<req.session.dataCardBike.length; i++) {
+    
+    line_items.push(
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: req.session.dataCardBike[i].name,
+          },
+          unit_amount: req.session.dataCardBike[i].price*100,
+        },
+        quantity: req.session.dataCardBike[i].quantity,
+      })}
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: [
-      {
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        price: 2000,
-        quantity: 1,
-      },
-    ],
+    payment_method_types: ['card'],
+    line_items: line_items,
     mode: 'payment',
-    success_url: "https://vast-citadel-14122.herokuapp.com/success",
-    cancel_url: "https://vast-citadel-14122.herokuapp.com/cancel",
+    success_url: 'http://localhost:3000/success',
+    cancel_url: 'http://localhost:3000/cancel',
   });
-
+ 
   res.redirect(303, session.url);
-});
+ });
 
 
 module.exports = router;

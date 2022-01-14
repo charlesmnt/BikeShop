@@ -70,5 +70,22 @@ body{
     color: crimson;
 }
 
+.box {
+    font-family: sans-serif;
+    background-color: #FFFFFF;
+    border : solid black;
+    border-radius : 20px;
+    display : flex;
+    flex-direction : column;
+    align-items: center;
+    justify-content: center;
+}
 
+#corps {
+    display : flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height : 100vh;
+}
 
