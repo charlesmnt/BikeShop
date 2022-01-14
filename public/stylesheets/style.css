@@ -81,7 +81,7 @@ body{
     justify-content: center;
 }
 
-#corps {
+.corps {
     display : flex;
     flex-direction: row;
     justify-content: center;
