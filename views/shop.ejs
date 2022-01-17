@@ -61,6 +61,8 @@
                             <% 
     
                             var totalCmd = 0;
+                            var fraisdeport = 0;
+                            var totalTTC = 0;
                             for(var i=0;i<dataCardBike.length;i++){
                             %>
                                 <tr class="basket-item">
@@ -81,11 +83,39 @@
                                     <td><a href="/delete-shop?position=<%=i%>"><button class="btn btn-outline-info btn-sm" name="button"><i class="far fa-trash-alt"></i></button></a></td>
                                 </tr>
                             <%
-                                totalCmd += dataCardBike[i].price * dataCardBike[i].quantity;
+                            totalCmd += (dataCardBike[i].price * dataCardBike[i].quantity);
+                            fraisdeport += (30 * (dataCardBike[i].quantity));
                                 // or totalCmd = dataCardBike[i].price * dataCardBike[i].quantity + totalCmd;
                             }
                             %>
-                            
+                            <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="total-box">Frais de port : </td>
+                            <% 
+                            if (totalCmd > 2000 & totalCmd < 4000) {
+                            fraisdeport = 0.5*(fraisdeport);
+                            totalTTC = totalCmd + fraisdeport;
+                            %>
+                            <td><%=fraisdeport%>€</td>
+                            <%
+                            } else if (totalCmd > 4000) {
+                            totalTTC = totalCmd;
+                            fraisdeport = 0;
+                            %>
+                            <td>Frais de port offert !</td>
+                            <%
+                            } else {
+                            totalTTC = totalCmd + fraisdeport;
+                            %>
+                            <td><%=fraisdeport%>€</td>
+                            <%
+                            }
+                            %>
+                            <td></td>
+                          </tr>
     
                           <tr>
                             <th scope="row"></th>
@@ -93,7 +123,7 @@
                             <td></td>
                             <td></td>
                             <td class="total-box">Total Basket : </td>
-                            <td><%= totalCmd %>€</td>
+                            <td><%=totalTTC%>€</td>
                             <td></td>
                           </tr>
                         </tbody>
@@ -102,6 +132,7 @@
                 <div class="row">
                     <div class="col-12 text-right">
                         <form action="/create-checkout-session" method="POST">
+                        <input type="hidden" name="fraisport" value="<%=fraisdeport%>">
                         <button class="btn btn-outline-info btn-sm btn-checkout" name="button-checkout" type="submit">Checkout</button>
                         </form>
                     </div>

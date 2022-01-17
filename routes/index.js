@@ -79,6 +79,8 @@ router.post('/update-shop', function(req, res, next){
 
 router.post('/create-checkout-session', async (req, res) => {
   var line_items = []
+  line_items.push({price_data : { currency: 'eur', product_data : {name:"Frais de port"},unit_amount : req.body.fraisport*100,},quantity:1,});
+
   for (var i=0; i<req.session.dataCardBike.length; i++) {
     
     line_items.push(
